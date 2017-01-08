@@ -1,0 +1,36 @@
+<ons-page id="plan" ng-controller="PlanController">
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button ng-click="toggleMenu()"><ons-icon icon="fa-bars"></ons-icon></ons-toolbar-button>
+      </div>
+      <div class="center"></div>
+    </ons-toolbar>
+    
+    <div id="planLeft" class="planbox">
+        <form class="planSelect">
+            <select ng-model="planLeftSelectedItem" ng-change="planLeftChange()">
+                <option ng-repeat="data in planLeftData track by $index" value="{{data.name}}">{{data.alt}}</option>
+            </select>
+        </form>
+        <div class="scaleButton" ng-click="scaleChangeLeft()">
+            <p class="scaleLevel">1x</p>
+        </div>
+        <div class="planImages">
+            <img ng-repeat="data in planLeftData track by $index" ng-src="img/plan/plan_{{data.name}}.png" ng-show="data.show" />
+        </div>
+    </div>
+    
+    <div id="planRight" class="planbox">
+        <form class="planSelect">
+            <select ng-model="planRightSelectedItem" ng-change="planRightChange()">
+                <option ng-repeat="data in planRightData track by $index" value="{{data.name}}">{{data.alt}}</option>
+            </select>
+        </form>
+        <div class="scaleButton" ng-click="scaleChangeRight()">
+            <p class="scaleLevel">1x</p>
+        </div>
+        <div class="planImages">
+            <img ng-repeat="data in planRightData track by $index" ng-src="img/plan/plan_{{data.name}}.png" ng-show="data.show" />
+        </div>
+    </div>
+</ons-page>

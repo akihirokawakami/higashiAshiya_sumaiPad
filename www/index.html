@@ -1,0 +1,351 @@
+<!DOCTYPE HTML>
+<html ng-csp>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: ms-appdata: ; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="components/loader.js"></script>
+    <!--<script src="js/winstore-jscompat.js"></script>-->
+    <script src="js/jquery.sublimeSlideshow.js"></script>
+    <link rel="stylesshet" href="components/monaca-onsenui/js/angular/angular-csp.css">
+    <link rel="stylesheet" href="components/loader.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/slider-pro.min.css">
+    <script src="js/jquery.sliderPro.min.js"></script>
+    <script>        
+        var viewInitFlag = false;
+        var viewImgOriginalWidth = 4553 //眺望シミュレーターで使う画像の横
+        var viewImgOriginaHeight = 573; //眺望シミュレーターで使う画像の縦
+        var viewRaderSize = 20; // レーダーの初期サイズ％
+        var screenSaverFlag = true;
+        var screenSaverTimeoutID;
+        
+        ons.bootstrap()
+            .config(function($compileProvider) {
+                $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|ms-appx):/);
+            })
+            .controller('AppController', function($scope) {
+                $scope.pageChange = function (page) {
+                    menu.setMainPage(page, {closeMenu: true});
+                }
+            })
+            .controller('HomeController', function($scope) {
+                $scope.toggleMenu = function () {
+                    menu.toggleMenu();
+                }
+                
+                // スライドショーを設置（cssでdisplay:noneにしてるから表示されない）
+                $.sublime_slideshow({
+                    src:[
+                        {url:"img/home/ss1.jpg"},
+                        {url:"img/home/ss2.jpg"},
+                        {url:"img/home/ss3.jpg"},
+                        {url:"img/home/ss4.jpg"},
+                        {url:"img/home/ss5.jpg"},
+                        {url:"img/home/ss6.jpg"}
+                    ],
+                    overlay: ""
+                });
+                // スクリーンセーバーを開始
+                screenSaverFlag = true;
+                screenSaver();
+                // スクリーンセーバを表示する
+                function screenSaver(){
+                    if (screenSaverFlag) {
+                        clearTimeout( screenSaverTimeoutID );
+                        screenSaverTimeoutID = setTimeout(function(){
+                            $(".sm-slider").fadeIn();
+                        }, 10000);
+                    }
+                }
+                $(window).mousemove(function( event ) {
+                    $(".sm-slider").hide();
+                    screenSaver();
+                });
+                $(window).click(function( event ) {
+                    $(".sm-slider").hide();
+                    screenSaver();
+                });
+                $(window).on('touchstart',function( event ) {
+                    $(".sm-slider").hide();
+                    screenSaver();
+                });
+            })
+            .controller('ViewController', function($scope) {
+                $scope.toggleMenu = function () {
+                    menu.toggleMenu();
+                }
+                
+                // スクリーンセーバーを停止
+                screenSaverFlag = false;
+                clearTimeout( screenSaverTimeoutID );
+                
+                // 階数の設定
+                $scope.floors = [true, false, false, false, false];
+                var intervalID;
+                var viewImgWidth;
+            
+                // マウス操作で左右に移動
+                $scope.leftButtonDown = function () {
+                    intervalID = setInterval(function(){
+                        var scrollLeft = $("#viewPhotoCarousel").scrollLeft();
+                        $("#viewPhotoCarousel").scrollLeft(scrollLeft-50);
+                    }, 20);
+                }
+                $scope.rightButtonDown = function () {
+                    intervalID = setInterval(function(){
+                        var scrollLeft = $("#viewPhotoCarousel").scrollLeft();
+                        $("#viewPhotoCarousel").scrollLeft(scrollLeft+50);
+                    }, 20);
+                }
+                $scope.mouseup = function () {
+                    clearInterval( intervalID );
+                }
+                // 階数ボタンを押したときの処理
+                $scope.floorNumberClick = function (num) {
+                    for (var i = 0; i < $scope.floors.length; i++) {
+                        $scope.floors[i] = false;
+                    }
+                    $scope.floors[num] = true;
+                    viewPhotoCarousel.setActiveCarouselItemIndex(num);
+                }
+                // カルーセルがドラッグ等で変更された時の階数ボタンの変更処理
+                $scope.carouselPostChange = function () {
+                    for (var i = 0; i < $scope.floors.length; i++) {
+                        $scope.floors[i] = false;
+                    }
+                    $scope.floors[viewPhotoCarousel.getActiveCarouselItemIndex()] = true;
+                }
+                
+                // レーダーのサイズをクリックする毎に変化させる
+                $scope.mapClick = function () {
+                    if (viewRaderSize >= 30) {
+                        viewRaderSize = 10;
+                    } else {
+                        viewRaderSize += 10;
+                    }
+                    $("#viewRader").css("width", viewRaderSize + "%");
+                }
+                // ウインドウの最大化などでウインドウサイズが変わったらもうアプリを再スタート
+                $(window).resize(function() {
+                    location.reload(true);
+                });
+                
+                // リピート処理が終了したときにいろいろ初期設定することにした
+                $scope.$on('ngRepeatFinished', function(ngRepeatFinishedEvent) {
+                    // カルーセルのアイテムの高さをカルーセルと合わせる
+                    $("#viewPhotoCarousel ons-carousel-item, #viewPhotoCarousel img").css("height", $("#viewPhotoCarousel").height());
+                    // 眺望画像の横サイズを計算
+                    viewImgWidth = Math.floor(viewImgOriginalWidth * ($('#viewPhotoCarousel img').height() / viewImgOriginaHeight));//Math.floor(4680/(1080/($("#viewSimulator").height())));
+                    // スクロールさせるカルーセルの幅をでっかくしとく（左にスクロールされる対策のため）
+                    $("#viewPhotoCarousel ons-carousel-item").width(viewImgWidth*100);
+                    // 眺望画像をめっちゃ右に寄せる
+                    $('#viewPhotoCarousel .img0').offset({ left: viewImgWidth*99 });
+                    $('#viewPhotoCarousel .img1').offset({ left: viewImgWidth*100 });
+                    // めっちゃ右にスクロールさせる
+                    $("#viewPhotoCarousel").scrollLeft(viewImgWidth*100 - viewImgWidth/1.28);
+                    
+                    // はじめは3階から
+                    viewPhotoCarousel.setActiveCarouselItemIndex(2);
+                });
+                
+                // スクロール後のイメージの位置を変える
+                function viewImagePositionChange(){
+                    var scrollLeft = $("#viewPhotoCarousel").scrollLeft();
+                    var offsetLeft0 = $('#viewPhotoCarousel .img0').offset().left;
+                    var offsetLeft1 = $('#viewPhotoCarousel .img1').offset().left;
+                    
+                    if(offsetLeft0 < -viewImgWidth){
+                        $('#viewPhotoCarousel .img0').offset({ left: offsetLeft1 + $('#viewPhotoCarousel .img1').width() });
+                    } else if(offsetLeft0 > viewImgWidth){
+                        $('#viewPhotoCarousel .img0').offset({ left: offsetLeft1 - $('#viewPhotoCarousel .img1').width() });
+                    }
+                    if(offsetLeft1 < -viewImgWidth){
+                        $('#viewPhotoCarousel .img1').offset({ left: offsetLeft0 + $('#viewPhotoCarousel .img0').width() });
+                    } else if(offsetLeft1 > viewImgWidth){
+                        $('#viewPhotoCarousel .img1').offset({ left: offsetLeft0 - $('#viewPhotoCarousel .img0').width() });
+                    }
+                    
+                    // レーダーを回転させる
+                    var deg = Math.floor((scrollLeft - Math.floor(scrollLeft/viewImgWidth) * viewImgWidth) / viewImgWidth * 360) + 100;
+                    $('#viewRader .rader').css({transform:'rotate(' + deg + 'deg)'});
+                }
+                
+                if (!viewInitFlag) {
+                    ons.ready(function() {
+                        $(document).on('pageinit', '#viewSimulator', function(event) {
+                            viewInitFlag = true;
+                            // 各イベント後の画像位置調整
+                            $("#viewPhotoCarousel").on('scroll', function(){
+                                viewImagePositionChange();
+                            });
+                            $("#viewPhotoCarousel").on('touchmove', function(){
+                                viewImagePositionChange();
+                            });
+                            $("#viewPhotoCarousel").on('dragend', function(){
+                                viewImagePositionChange();
+                            });
+                            
+                            // 初回読み込み時にスクロールできなかったり画像がでなかったりするバグがあるのでその対策
+                            viewPhotoCarousel.refresh();
+                        });
+                    });
+                }
+            })
+            .controller('MovieController', function($scope) {
+                $scope.toggleMenu = function () {
+                    menu.toggleMenu();
+                }
+                
+                // スクリーンセーバーを停止
+                screenSaverFlag = false;
+                clearTimeout( screenSaverTimeoutID );
+                
+                // 動画画面クリックで再生停止
+                $scope.videoClick = function () {
+                    if($('#movie video')[0].paused){
+                        $('#movie video')[0].play();
+                    }else{
+                        $('#movie video')[0].pause();
+                    }
+                }
+            })
+            .controller('PlanController', function($scope) {
+                $scope.toggleMenu = function () {
+                    menu.toggleMenu();
+                }
+                
+                // スクリーンセーバーを停止
+                screenSaverFlag = false;
+                clearTimeout( screenSaverTimeoutID );
+                
+                $scope.planLeftData = [
+                    {name:"a", alt:"A type", show:true},
+                    {name:"b", alt:"B type", show:false},
+                    {name:"c", alt:"C type", show:false},
+                    {name:"d", alt:"D type", show:false},
+                    {name:"e", alt:"E type", show:false},
+                    {name:"f", alt:"F type", show:false},
+                    {name:"g", alt:"G type", show:false}
+                ];
+                $scope.planRightData =  $.extend(true, [], $scope.planLeftData);
+                $scope.planLeftSelectedItem = $scope.planRightSelectedItem = "a";
+                
+                $scope.planLeftChange = function () {
+                    stateChange($scope.planLeftData, $scope.planLeftSelectedItem);
+                }
+                $scope.planRightChange = function () {
+                    stateChange($scope.planRightData, $scope.planRightSelectedItem);
+                }
+                
+                var scaleNum = {Left:1, Right:1};
+                $scope.scaleChangeLeft = function(){ 
+                    scaleChange('Left');
+                }
+                $scope.scaleChangeRight = function(){ 
+                    scaleChange('Right');
+                }
+                
+                function scaleChange(d){
+                    scaleNum[d]++;
+                    if(scaleNum[d] > 3) scaleNum[d] = 1;
+                    $('#plan'+d+' .scaleLevel').text(scaleNum[d] + 'x');
+                    $('#plan'+d+' img').css({
+                        'transform' : 'translate(-50%, -50%) scale(' + scaleNum[d] + ')'
+                    }); 
+                }
+                
+                function stateChange(d,n) {
+                    for (var i = 0; i < d.length; i++) {
+                        d[i].show = false;
+                        if (d[i].name == n) {
+                            d[i].show = true;
+                        }
+                    }
+                }
+            })
+            .controller('GalleryController', function($scope) {
+                $scope.toggleMenu = function () {
+                    menu.toggleMenu();
+                }
+                
+                // スクリーンセーバーを停止
+                screenSaverFlag = false;
+                clearTimeout( screenSaverTimeoutID );
+                
+                $( '.slider-pro' ).sliderPro({
+                    width: $('#gallery').width(),
+        	        height: $('body').height() - $('.navigation-bar').height()-20,
+        			orientation: 'vertical',
+        			loop: false,
+        			arrows: true,
+        			buttons: false,
+        			thumbnailsPosition: 'right',
+        			thumbnailPointer: true,
+        			thumbnailWidth: 200,
+                    thumbnailHeight: 116
+        		});
+            })
+            .controller('LocationController', function($scope) {
+                $scope.toggleMenu = function () {
+                    menu.toggleMenu();
+                }
+                
+                // スクリーンセーバーを停止
+                screenSaverFlag = false;
+                clearTimeout( screenSaverTimeoutID );
+            })
+            /*
+            * ngリピートの終了イベントを発火
+            * http://note.onichannn.net/archives/2378
+            */
+            .directive('onFinishRender', function ($timeout) {
+                return {
+                    restrict: 'A',
+                    link: function (scope, element, attr) {
+                        if (scope.$last === true) {
+                            $timeout(function () {
+                                scope.$emit('ngRepeatFinished');
+                            });
+                        }
+                    }
+                }
+            });
+    </script>
+</head>
+<body ng-controller="AppController">
+    <ons-sliding-menu
+      main-page="home.html"
+      menu-page="menu.html"
+      side="left"
+      max-slide-distance="30%"
+      var="menu"
+      swipeable="false">
+    </ons-sliding-menu>
+    
+    <ons-template id="menu.html">
+      <ons-page>
+        <ons-list>
+            <ons-list-item modifier="chevron" ng-click="pageChange('home.html')">
+              HOME
+            </ons-list-item>
+            <ons-list-item modifier="chevron" ng-click="pageChange('location.html')">
+              ロケーション
+            </ons-list-item>
+            <ons-list-item modifier="chevron" ng-click="pageChange('viewSimulator.html')">
+              眺望シミュレーター
+            </ons-list-item>
+            <ons-list-item modifier="chevron" ng-click="pageChange('movie.html')">
+              コンセプトムービー
+            </ons-list-item>
+            <ons-list-item modifier="chevron" ng-click="pageChange('plan.html')">
+              間取り
+            </ons-list-item>
+            <ons-list-item modifier="chevron" ng-click="pageChange('gallery.html')">
+              ギャラリー
+            </ons-list-item>
+        </ons-list>
+      </ons-page>
+    </ons-template>
+</body>
+</html>

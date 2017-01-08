@@ -1,0 +1,13 @@
+<ons-page id="movie" ng-controller="MovieController">
+    <ons-toolbar>
+      <div class="left">
+        <ons-toolbar-button ng-click="toggleMenu()"><ons-icon icon="fa-bars"></ons-icon></ons-toolbar-button>
+      </div>
+      <div class="center"></div>
+    </ons-toolbar>
+    <div class="wrap">
+        <video class="video-js" controls preload="auto" autoplay ng-click="videoClick()">
+            <source src="ms-appdata:///local/movie/movie1.mp4" type='video/mp4'>
+        </video>
+    </div>
+</ons-page>
