@@ -12,8 +12,8 @@
         </ons-row>
     </div>
     
-    <div class="leftButton" ng-mousedown="leftButtonDown()"><ons-icon icon="ion-chevron-left" size="50px"></ons-icon></div>
-    <div class="rightButton" ng-mousedown="rightButtonDown()"><ons-icon icon="ion-chevron-right" size="50px"></ons-icon></div>
+    <div class="leftButton" ng-mousedown="leftButtonDown()"  ng-mouseleave="mouseleave()"><ons-icon icon="ion-chevron-left" size="50px"></ons-icon></div>
+    <div class="rightButton" ng-mousedown="rightButtonDown()"  ng-mouseleave="mouseleave()"><ons-icon icon="ion-chevron-right" size="50px"></ons-icon></div>
     
     <ons-carousel id="viewPhotoCarousel" initial-index="3" var="viewPhotoCarousel" ons-postchange="carouselPostChange()" direction="vertical" 
     auto-scroll-ratio="0.2" swipeable overscrollable auto-scroll draggable>
