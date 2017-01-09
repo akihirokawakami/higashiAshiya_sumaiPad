@@ -1,6 +1,28 @@
 body, html {
     overflow: hidden;
 }
+ons-toolbar.navigation-bar {
+    position: static!important;
+}
+ons-toolbar + .page__background + .page__content {
+    top: 0!important;
+}
+ons-toolbar-button {
+    position: absolute;
+    z-index: 100000;
+}
+.toolbar-button {
+    color: #F9BF45!important;
+    font-size: 1.4em!important;
+}
+.navigation-bar__line-height {
+    line-height: 150px;
+}
+ons-list.list.ons-list-inner {
+    margin-top: 65px;
+}
+
+
 
 /* home */
 #home .main {
@@ -155,6 +177,7 @@ body, html {
 /* 間取り */
 #plan .planSelect {
     position: absolute;
+    bottom: 0;
     padding: 30px;
     z-index: 10;
 }
@@ -203,7 +226,8 @@ body, html {
 #plan .scaleButton {
     position: absolute;
     padding: 5px 25px;
-    margin: 5px;
+    margin: 15px;
+    bottom: 0;
     right: 0;
     z-index: 10;
     border-radius: 50%;
@@ -220,7 +244,7 @@ body, html {
 
 /* ギャラリー */
 .sp-caption-container {
-    margin: 0 0 5px 5px !important;
+    margin: 5px 0 5px 5px !important;
     text-align: left !important;
     font-size: 9px;
 }
@@ -234,4 +258,5 @@ body, html {
     width: 100%;
     height: 100%;
     text-align: center;
+    background: #000;
 }

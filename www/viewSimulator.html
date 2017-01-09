@@ -15,7 +15,8 @@
     <div class="leftButton" ng-mousedown="leftButtonDown()"><ons-icon icon="ion-chevron-left" size="50px"></ons-icon></div>
     <div class="rightButton" ng-mousedown="rightButtonDown()"><ons-icon icon="ion-chevron-right" size="50px"></ons-icon></div>
     
-    <ons-carousel id="viewPhotoCarousel" initial-index="3" var="viewPhotoCarousel" ons-postchange="carouselPostChange()" direction="vertical" auto-scroll-ratio="0.2" swipeable overscrollable auto-scroll draggable>
+    <ons-carousel id="viewPhotoCarousel" initial-index="3" var="viewPhotoCarousel" ons-postchange="carouselPostChange()" direction="vertical" 
+    auto-scroll-ratio="0.2" swipeable overscrollable auto-scroll draggable>
         <ons-carousel-item ng-repeat="data in floors track by $index" on-finish-render swipeable draggable>
             <img ng-src="img/view/{{floors.length - $index}}.jpg" class="img0" /><img ng-src="img/view/{{floors.length - $index}}.jpg" class="img1" />
         </ons-carousel-item>
@@ -24,7 +25,8 @@
     <div class="bottom">
         <div id="viewRader">
             <div class="map"><img src="img/view/map.png" /></div>
-            <div class="rader" ng-click="mapClick()"><img src="img/view/rader.png" /></div>
+            <div class="rader"><img src="img/view/rader.png" /></div>
+            <!--<div class="rader" ng-click="mapClick()"><img src="img/view/rader.png" /></div>-->
         </div>
     </div>
 </ons-page>
