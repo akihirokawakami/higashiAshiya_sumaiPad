@@ -250,8 +250,8 @@
                 }
                 
                 var scaleNum = {Left:1, Right:1};
-                var x = [ '-50%', '-45%', '-25%'];
-                var y = ['-30%']
+                var x = [ '-50%', '-30%', '0%'];
+                var y = ['-50%', '-40%', '-15%'];
                 var i = 0;
                 function scaleChange(d){
                     scaleNum[d]++;
@@ -262,11 +262,11 @@
                     $('#plan'+d+' .scaleLevel').text(scaleNum[d] + 'x');
                     if(scaleNum[d] > 1){
                         $('#plan'+d+' img').css({
-                            'transform' : 'translate(' +x[i]+ ','+ y[0] +') scale(' + scaleNum[d]*.7 + ')'
+                            'transform' : 'translate(' +x[i]+ ','+ y[i] +') scale(' + scaleNum[d]*0.65 + ')'
                         });
                     }else{
                         $('#plan'+d+' img').css({
-                            'transform' : 'translate(' +x[i]+ ', -50%) scale(' + scaleNum[d] + ')'
+                            'transform' : 'translate(' +x[i]+ ',' +y[i]+ ') scale(' + scaleNum[d] + ')'
                         });
                     }
                 }
