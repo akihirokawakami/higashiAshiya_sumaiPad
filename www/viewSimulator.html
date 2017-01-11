@@ -1,4 +1,4 @@
-<ons-page id="viewSimulator" ng-controller="ViewController" ng-mouseup="mouseup()">
+<ons-page id="viewSimulator" ng-controller="ViewController" ng-mouseup="mouseup()" swipeable="true" style="overflow:hidden;">
     <ons-toolbar>
       <div class="left">
         <ons-toolbar-button ng-click="toggleMenu()"><ons-icon icon="fa-bars"></ons-icon></ons-toolbar-button>
@@ -6,7 +6,7 @@
       <div class="center"></div>
     </ons-toolbar>
     
-    <div id="viewFloorNumber">
+    <div id="viewFloorNumber"swipeable="true">
         <ons-row align="center" ng-repeat="data in floors track by $index" ng-click="floorNumberClick($index)" ng-class="{current: data}">
             <ons-col>{{floors.length - $index}}</ons-col>
         </ons-row>
@@ -17,7 +17,7 @@
     
     <ons-carousel id="viewPhotoCarousel" initial-index="3" var="viewPhotoCarousel" ons-postchange="carouselPostChange()" direction="vertical" 
     auto-scroll-ratio="0.2" swipeable overscrollable auto-scroll draggable>
-        <ons-carousel-item ng-repeat="data in floors track by $index" on-finish-render swipeable draggable>
+        <ons-carousel-item ng-repeat="data in floors track by $index" on-finish-render swipeable draggable overscrollable>
             <img ng-src="img/view/{{floors.length - $index}}.jpg" class="img0" /><img ng-src="img/view/{{floors.length - $index}}.jpg" class="img1" />
         </ons-carousel-item>
     </ons-carousel>

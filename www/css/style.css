@@ -1,5 +1,5 @@
 body, html {
-    overflow: hidden;
+    overflow: hidden!important;
 }
 ons-toolbar.navigation-bar {
     position: static!important;
@@ -12,11 +12,12 @@ ons-toolbar-button {
     z-index: 100000;
 }
 .toolbar-button {
-    color: #F9BF45!important;
+    color: #ff0!important;
     font-size: 1.4em!important;
 }
 .navigation-bar__line-height {
     line-height: 150px;
+    margin-left: 5px;
 }
 ons-list.list.ons-list-inner {
     margin-top: 65px;
@@ -33,12 +34,22 @@ ons-list.list.ons-list-inner {
     background-position: center;
     background-repeat: no-repeat;
     background-image: url("../img/home/home.jpg");
+    overflow: hidden;
 }
 
 .sm-slider {
     z-index: 100 !important;
     background: #000;
     display: none;
+}
+
+/* ロケーション */
+#location .wrap {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: #000;
+    overflow: hidden;
 }
 
 /* 眺望 */
@@ -166,6 +177,7 @@ ons-list.list.ons-list-inner {
     height: 100%;
     background: #000;
     text-align: center;
+    overflow: hidden;
 }
 #movie video {
     max-width: 100%;
@@ -177,8 +189,10 @@ ons-list.list.ons-list-inner {
 /* 間取り */
 #plan .planSelect {
     position: absolute;
-    bottom: 0;
-    padding: 30px;
+    top: 3%;
+    right: 3%;
+    /*padding: 30px;*/
+    /*margin: 15px;*/
     z-index: 10;
 }
 #plan .planSelect select {
@@ -210,13 +224,17 @@ ons-list.list.ons-list-inner {
     left: 50%;
     background: #fcfcfc!important;
 }
+#plan .planImagesWrap {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    overflow: scroll;
+    transform: translateZ(0);
+}
 #plan .planImages {
     width: 100%;
     height: 100%;
-    position: relative;
-    overflow: scroll!important;
-    overflow-x: scroll!important;
-    overflow-y: scroll!important;
 }
 #plan img {
     position: absolute;
@@ -225,13 +243,12 @@ ons-list.list.ons-list-inner {
     transform-origin : center center;
     transform: translate(-50%, -50%) scale(1);
     max-width: 100%;
-    max-height: 100%;
-    overflow: scroll;
+    height: auto;
 }
 #plan .scaleButton {
     position: absolute;
     padding: 5px 25px;
-    margin: 15px;
+    margin: 20px 30px;
     bottom: 0;
     right: 0;
     z-index: 10;
@@ -256,12 +273,4 @@ ons-list.list.ons-list-inner {
 
 .ng-hide {
     display: none;
-}
-
-/* ロケーション */
-#location .wrap {
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    background: #000;
 }
