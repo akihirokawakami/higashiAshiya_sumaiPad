@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
-<!--<html ng-csp>-->
-<html>
+<html ng-csp>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -237,9 +236,11 @@
                 
                 $scope.planLeftChange = function () {
                     stateChange($scope.planLeftData, $scope.planLeftSelectedItem);
+                    currentName = $scope.planLeftSelectedItem;
                 }
                 $scope.planRightChange = function () {
                     stateChange($scope.planRightData, $scope.planRightSelectedItem);
+                    currentName = $scope.planRightSelectedItem;
                 }
                 
                 $scope.scaleChangeLeft = function(){ 
@@ -250,9 +251,10 @@
                 }
                 
                 var scaleNum = {Left:1, Right:1};
-                var x = [ '-50%', '-30%', '0%'];
+                var x = ['-50%', '-30%', '0%'];
                 var y = ['-50%', '-40%', '-15%'];
                 var i = 0;
+                
                 function scaleChange(d){
                     scaleNum[d]++;
                     i++;
@@ -270,6 +272,38 @@
                         });
                     }
                 }
+                
+                //これが出来たら最高
+                //出来ないときは関数を呼び出さない
+                // var z = [{top: '-50%'},{left: '-50%'}];//初期位置を取得しておく
+                // var zz;
+                // var i = 0;
+                // var currentName = 'a';
+                // var currentName2, currentNameAll;
+                // var posList = [
+                //         {name: 'a', top: 200, left: 30},
+                //         {name: 'b', top: 200, left: 20},
+                //         {name: 'c', top: 200, left: 17},
+                //         {name: 'e', top: 150, left: 17},
+                //         {name: 'f', top: 40, left: 17},
+                //         {name: 'g', top: 20, left: 17}
+                //     ];
+                // function imgInitPosition(){
+                //     zz = $('.planImg').offset();
+                //     console.log(zz);
+                //     //currentName = $scope.planRightSelectedItem;
+                //     //currentNameAll = currentName += currentName2;
+                //     console.log(currentName);
+                //     //console.log(currentNameAll);
+                //     for ( var i = 0; i < posList.length; i++){
+                //         if(posList[i].name === currentName){
+                //             $('.planImg').offset({top: posList[i].top, left: posList[i].left});
+                //         }else{
+                //             $('.planImg').offset({top: posList[0].top, left: posList[0].left});
+                //         }
+                //     }
+                //     console.log(1);
+                // }
                 
                 function stateChange(d,n) {
                     for (var i = 0; i < d.length; i++) {

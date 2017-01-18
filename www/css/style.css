@@ -12,7 +12,7 @@ ons-toolbar-button {
     z-index: 100000;
 }
 .toolbar-button {
-    color: #ff0!important;
+    color: #ccc!important;
     font-size: 1.4em!important;
 }
 .navigation-bar__line-height {

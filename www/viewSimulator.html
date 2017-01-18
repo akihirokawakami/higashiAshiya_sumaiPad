@@ -6,7 +6,7 @@
       <div class="center"></div>
     </ons-toolbar>
     
-    <div id="viewFloorNumber"swipeable="true">
+    <div id="viewFloorNumber" swipeable="true">
         <ons-row align="center" ng-repeat="data in floors track by $index" ng-click="floorNumberClick($index)" ng-class="{current: data}">
             <ons-col>{{floors.length - $index}}</ons-col>
         </ons-row>
